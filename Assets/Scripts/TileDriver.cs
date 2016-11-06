@@ -9,7 +9,7 @@ public class TileDriver : MonoBehaviour {
 	}
 
 	void Update() {
-		if (Input.GetMouseButtonDown (Mouse.BUTTON_LEFT)) {
+		if (Input.GetMouseButtonDown (InputManager.BUTTON_MOUSE_LEFT)) {
 			this.Click ();
 		}
 	}
