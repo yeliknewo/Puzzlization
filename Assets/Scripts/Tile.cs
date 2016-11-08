@@ -36,17 +36,20 @@ public class Tile : MonoBehaviour {
 
 	public void SetType(TileType newType) {
 		switch (newType) {
-		case TileType.Purple:
-			SetTypePurple ();
+		case TileType.Ocean:
+			SetTypeOcean ();
 			break;
-		case TileType.Red:
-			SetTypeRed ();
+		case TileType.Flat:
+			SetTypeFlat ();
 			break;
-		case TileType.Green:
-			SetTypeGreen ();
+		case TileType.Hills:
+			SetTypeHills ();
 			break;
-		case TileType.Blue:
-			SetTypeBlue ();
+		case TileType.Peak:
+			SetTypePeak ();
+			break;
+		case TileType.Coast:
+			SetTypeCoast ();
 			break;
 		case TileType.None:
 			throw new UnityException ("Type was TileType.None");
@@ -60,31 +63,37 @@ public class Tile : MonoBehaviour {
 		transform.position = new Vector2 (this.coords.x, this.coords.y);
 	}
 
-	void SetTypePurple() {
-		this.type = TileType.Purple;
-		this.spriteRenderer.color = Color.Lerp (Color.red, Color.blue, 0.5f);
+	void SetTypeOcean() {
+		this.type = TileType.Ocean;
+		this.spriteRenderer.color = Color.blue;
 	}
 
-	void SetTypeRed() {
-		this.type = TileType.Red;
-		this.spriteRenderer.color = Color.red;
-	}
-
-	void SetTypeGreen() {
-		this.type = TileType.Green;
+	void SetTypeFlat() {
+		this.type = TileType.Flat;
 		this.spriteRenderer.color = Color.green;
 	}
 
-	void SetTypeBlue() {
-		this.type = TileType.Blue;
-		this.spriteRenderer.color = Color.blue;
+	void SetTypeHills() {
+		this.type = TileType.Hills;
+		this.spriteRenderer.color = Color.magenta;
+	}
+
+	void SetTypePeak() {
+		this.type = TileType.Peak;
+		this.spriteRenderer.color = Color.red;
+	}
+
+	void SetTypeCoast() {
+		this.type = TileType.Coast;
+		this.spriteRenderer.color = Color.cyan;
 	}
 }
 
 public enum TileType {
-	Purple,
-	Red,
-	Green,
-	Blue,
+	Flat,
+	Hills,
+	Peak,
+	Coast,
+	Ocean,
 	None,
 }

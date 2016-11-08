@@ -26,16 +26,17 @@ public class LevelGen : MonoBehaviour {
 	}
 
 	TileType GetTileType(int x, int y) {
-		if (x == minX && y == minY) {
-			return TileType.Purple;
-		}
-		switch (Mathf.FloorToInt(Random.value * 3)) {
+		switch (Mathf.FloorToInt (Random.value * 5)) {
 		case 0:
-			return TileType.Red;
+			return TileType.Coast;
 		case 1:
-			return TileType.Green;
+			return TileType.Flat;
 		case 2:
-			return TileType.Blue;
+			return TileType.Hills;
+		case 3:
+			return TileType.Ocean;
+		case 4:
+			return TileType.Peak;
 		default:
 			return TileType.None;
 		}

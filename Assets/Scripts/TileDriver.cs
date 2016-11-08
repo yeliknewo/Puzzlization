@@ -12,6 +12,55 @@ public class TileDriver : MonoBehaviour {
 		if (Input.GetMouseButtonDown (InputManager.BUTTON_MOUSE_LEFT)) {
 			this.Click ();
 		}
+		if (Input.GetKeyDown (InputManager.BUTTON_KEY_SPACE)) {
+			this.Turn ();
+		}
+	}
+
+	void Turn() {
+		foreach (Tile tile in map.tiles.Values) {
+			switch (tile.type) {
+			case TileType.Coast:
+				TurnCoast (tile);
+				break;
+			case TileType.Flat:
+				TurnFlat (tile);
+				break;
+			case TileType.Hills:
+				TurnHills (tile);
+				break;
+			case TileType.Ocean:
+				TurnOcean (tile);
+				break;
+			case TileType.Peak:
+				TurnPeak (tile);
+				break;
+			case TileType.None:
+				break;
+			default:
+				throw new UnityException ("Unhandled TileType");
+			}
+		}
+	}
+
+	void TurnCoast(Tile tile) {
+		tile.SetType (TileType.Peak);
+	}
+
+	void TurnFlat(Tile tile) {
+		tile.SetType (TileType.Coast);
+	}
+
+	void TurnHills(Tile tile) {
+		tile.SetType (TileType.Flat);
+	}
+
+	void TurnOcean(Tile tile) {
+		tile.SetType (TileType.Hills);
+	}
+
+	void TurnPeak(Tile tile) {
+		tile.SetType (TileType.Ocean);
 	}
 
 	void Click() {
@@ -22,137 +71,46 @@ public class TileDriver : MonoBehaviour {
 
 		if (tile != null) {
 			switch (tile.type) {
-			case TileType.Purple:
-				ClickPurple (tile);
+			case TileType.Coast:
+				ClickCoast (tile);
 				break;
-			case TileType.Red:
-				ClickRed (tile);
+			case TileType.Flat:
+				ClickFlat (tile);
 				break;
-			case TileType.Green:
-				ClickGreen (tile);
+			case TileType.Hills:
+				ClickHills (tile);
 				break;
-			case TileType.Blue:
-				ClickBlue (tile);
+			case TileType.Ocean:
+				ClickOcean (tile);
+				break;
+			case TileType.Peak:
+				ClickPeak (tile);
 				break;
 			case TileType.None:
-				throw new UnityException ("TileType is None");
+				break;
 			default:
 				throw new UnityException ("Unhandled TileType");
 			}
 		}
 	}
 
-	void ClickPurple(Tile tile) {
-		tile.SetType (TileType.Red);
-		Point2 coords = tile.coords;
-		for (short y = (short)(coords.y - 1); y <= coords.y + 1; y++) {
-			for (short x = (short)(coords.x - 1); x <= coords.x + 1; x++) {
-				Tile temp;
-				map.tiles.TryGetValue (new Point2 (x, y), out temp);
-				if (temp != null) {
-					switch (temp.type) {
-					case TileType.Purple:
-						break;
-					case TileType.Red:
-						temp.SetType (TileType.Blue);
-						break;
-					case TileType.Green:
-						temp.SetType (TileType.Blue);
-						break;
-					case TileType.Blue:
-						temp.SetType (TileType.Red);
-						break;
-					case TileType.None:
-						throw new UnityException ("TileType was None");
-					default:
-						throw new UnityException ("Unhandled TileType");
-					}
-				}
-			}
-		}
+	void ClickCoast(Tile tile) {
+		tile.SetType (TileType.Flat);
 	}
 
-	void ClickRed(Tile tile) {
-		Point2 coords = tile.coords;
-		for (short y = (short)(coords.y - 1); y <= coords.y + 1; y++) {
-			for (short x = (short)(coords.x - 1); x <= coords.x + 1; x++) {
-				Tile temp;
-				map.tiles.TryGetValue (new Point2 (x, y), out temp);
-				if (temp != null) {
-					switch (temp.type) {
-					case TileType.Purple:
-						break;
-					case TileType.Red:
-						break;
-					case TileType.Green:
-						temp.SetType (TileType.Blue);
-						break;
-					case TileType.Blue:
-						temp.SetType (TileType.Green);
-						break;
-					case TileType.None:
-						throw new UnityException ("TileType was None");
-					default:
-						throw new UnityException ("Unhandled TileType");
-					}
-				}
-			}
-		}
+	void ClickFlat(Tile tile) {
+		tile.SetType (TileType.Hills);
 	}
 
-	void ClickGreen(Tile tile) {
-		Point2 coords = tile.coords;
-		for (short y = (short)(coords.y - 1); y <= coords.y + 1; y++) {
-			for (short x = (short)(coords.x - 1); x <= coords.x + 1; x++) {
-				Tile temp;
-				map.tiles.TryGetValue (new Point2 (x, y), out temp);
-				if (temp != null) {
-					switch (temp.type) {
-					case TileType.Purple:
-						break;
-					case TileType.Red:
-						temp.SetType (TileType.Blue);
-						break;
-					case TileType.Green:
-						break;
-					case TileType.Blue:
-						temp.SetType (TileType.Red);
-						break;
-					case TileType.None:
-						throw new UnityException ("TileType was None");
-					default:
-						throw new UnityException ("Unhandled TileType");
-					}
-				}
-			}
-		}
+	void ClickHills(Tile tile) {
+		tile.SetType (TileType.Ocean);
 	}
 
-	void ClickBlue(Tile tile) {
-		Point2 coords = tile.coords;
-		for (short y = (short)(coords.y - 1); y <= coords.y + 1; y++) {
-			for (short x = (short)(coords.x - 1); x <= coords.x + 1; x++) {
-				Tile temp;
-				map.tiles.TryGetValue (new Point2 (x, y), out temp);
-				if (temp != null) {
-					switch (temp.type) {
-					case TileType.Purple:
-						break;
-					case TileType.Red:
-						temp.SetType (TileType.Green);
-						break;
-					case TileType.Green:
-						temp.SetType (TileType.Red);
-						break;
-					case TileType.Blue:
-						break;
-					case TileType.None:
-						throw new UnityException ("TileType was None");
-					default:
-						throw new UnityException ("Unhandled TileType");
-					}
-				}
-			}
-		}
+	void ClickOcean(Tile tile) {
+		tile.SetType (TileType.Peak);
+	}
+
+	void ClickPeak(Tile tile) {
+		tile.SetType (TileType.Coast);
 	}
 }
