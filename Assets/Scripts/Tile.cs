@@ -29,9 +29,21 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
+	private Map map {
+		get {
+			return Object.FindObjectOfType<Map> ();
+		}
+	}
+
 	public void Setup(Point2 coords, TileType newType) {
 		SetCoords (coords);
 		SetType (newType);
+	}
+		
+	void SetCoords(Point2 newCoords) {
+		this.coords = newCoords;
+		transform.position = new Vector2 (this.coords.x, this.coords.y);
+		map.tiles.Add (coords, this);
 	}
 
 	public void SetType(TileType newType) {
@@ -58,34 +70,29 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	void SetCoords(Point2 newCoords) {
-		this.coords = newCoords;
-		transform.position = new Vector2 (this.coords.x, this.coords.y);
-	}
-
 	void SetTypeOcean() {
 		this.type = TileType.Ocean;
-		this.spriteRenderer.color = Color.blue;
+		this.spriteRenderer.color = Color.Lerp(Color.blue, Color.black, 0.1f);
 	}
 
 	void SetTypeFlat() {
 		this.type = TileType.Flat;
-		this.spriteRenderer.color = Color.green;
+		this.spriteRenderer.color = Color.Lerp(Color.green, Color.black, 0.2f);
 	}
 
 	void SetTypeHills() {
 		this.type = TileType.Hills;
-		this.spriteRenderer.color = Color.magenta;
+		this.spriteRenderer.color = Color.Lerp(Color.magenta, Color.black, 0.5f);
 	}
 
 	void SetTypePeak() {
 		this.type = TileType.Peak;
-		this.spriteRenderer.color = Color.red;
+		this.spriteRenderer.color = Color.Lerp(Color.red, Color.black, 0.7f);
 	}
 
 	void SetTypeCoast() {
 		this.type = TileType.Coast;
-		this.spriteRenderer.color = Color.cyan;
+		this.spriteRenderer.color = Color.Lerp(Color.cyan, Color.black, 0.3f);
 	}
 }
 

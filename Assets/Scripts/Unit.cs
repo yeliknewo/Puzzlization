@@ -34,41 +34,72 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
+	private Map map {
+		get {
+			return Object.FindObjectOfType<Map> ();
+		}
+	}
+
 	public void Setup(Point2 coords, UnitType newType) {
 		SetCoords (coords);
 		SetType (newType);
 	}
 
-	void SetCoords(Point2 newCoords) {
-		this.coords = newCoords;
-		transform.position = new Vector2 (this.coords.x, this.coords.y);
+	public void SetTile(Tile newTile) {
+		this.tile = newTile;
+		transform.position = this.tile.transform.position + Vector3.back;
+	}
+
+	public void SetCoords(Point2 newCoords) {
+		Tile temp;
+		map.tiles.TryGetValue (newCoords, out temp);
+		if (temp != null) {
+			SetTile (temp);
+		}
 	}
 
 	public void SetType(UnitType newType) {
 		switch (newType) {
-		case TileType.Ocean:
-			SetTypeOcean ();
+		case UnitType.Axe:
+			SetTypeAxe ();
 			break;
-		case TileType.Flat:
-			SetTypeFlat ();
+		case UnitType.Sword:
+			SetTypeSword ();
 			break;
-		case TileType.Hills:
-			SetTypeHills ();
+		case UnitType.Spear:
+			SetTypeSpear ();
 			break;
-		case TileType.Peak:
-			SetTypePeak ();
+		case UnitType.Horse:
+			SetTypeHorse ();
 			break;
-		case TileType.Coast:
-			SetTypeCoast ();
-			break;
-		case TileType.None:
+		case UnitType.None:
 			throw new UnityException ("Type was TileType.None");
 		default:
 			throw new UnityException ("Unhandled TileType");
 		}
 	}
+
+	void SetTypeAxe() {
+
+	}
+
+	void SetTypeSword() {
+
+	}
+
+	void SetTypeSpear() {
+
+	}
+
+	void SetTypeHorse() {
+
+	}
 }
 
 public enum UnitType {
+	Axe,
+	Sword,
+	Spear,
+	Horse,
 	None,
 }
