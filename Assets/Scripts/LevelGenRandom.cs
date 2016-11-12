@@ -3,7 +3,7 @@
 namespace LevelGenRandom {
 	public class Core
 	{
-		public static TileType GetTileType(Point2 coords, TileData tileData) {
+		public static TileType GetTileType(Point2<int> coords, TileData tileData) {
 			switch (Mathf.FloorToInt (UnityEngine.Random.value * 5)) {
 			case 0:
 				return TileType.Coast;
@@ -20,7 +20,7 @@ namespace LevelGenRandom {
 			}
 		}
 
-		public static UnitType GetUnitType(Point2 coords, UnitData unitData) {
+		public static UnitType GetUnitType(Point2<int> coords, UnitData unitData) {
 			switch (Mathf.FloorToInt (UnityEngine.Random.value * 10)) {
 			case 0:
 				return UnitType.Axe;

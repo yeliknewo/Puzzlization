@@ -7,11 +7,11 @@ public class LevelGen : MonoBehaviour {
 	public GameObject tileObjPrefab;
 	public GameObject unitObjPrefab;
 
-	public short minX = -8, maxX = 8, minY =-8, maxY = 8;
+	public int minX = -8, maxX = 8, minY =-8, maxY = 8;
 
 	void Start() {
-		Point2 min = new Point2 (minX, minY);
-		Point2 max = new Point2(maxX, maxY);
+		Point2<int> min = new Point2<int> (minX, minY);
+		Point2<int> max = new Point2<int>(maxX, maxY);
 		GenerateLevel<LevelGenDiamondSquare.Gen> (
 			min,
 			max,
@@ -19,10 +19,10 @@ public class LevelGen : MonoBehaviour {
 		);
 	}
 
-	void GenerateLevel<G> (Point2 min, Point2 max, G gen) where G: LevelGenerator {
-		for (short y = minY; y <= maxY; y++) {
-			for (short x = minX; x <= maxX; x++) {
-				Point2 coords = new Point2 (x, y);
+	void GenerateLevel<G> (Point2<int> min, Point2<int> max, G gen) where G: LevelGenerator {
+		for (int y = minY; y <= maxY; y++) {
+			for (int x = minX; x <= maxX; x++) {
+				Point2<int> coords = new Point2<int> (x, y);
 
 				TileType tileType = gen.GetTileType (coords);
 				if (tileType != TileType.None) {
@@ -43,6 +43,6 @@ public class LevelGen : MonoBehaviour {
 }
 
 public interface LevelGenerator {
-	TileType GetTileType(Point2 coords);
-	UnitType GetUnitType(Point2 coords);
+	TileType GetTileType(Point2<int> coords);
+	UnitType GetUnitType(Point2<int> coords);
 }

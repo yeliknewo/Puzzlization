@@ -67,7 +67,7 @@ public class TileDriver : MonoBehaviour {
 		Vector2 mousePos = Object.FindObjectOfType<Camera>().ScreenToWorldPoint(Input.mousePosition);
 
 		Tile tile;
-		map.tiles.TryGetValue(new Point2 ((short)Mathf.RoundToInt(mousePos.x), (short)Mathf.RoundToInt(mousePos.y)), out tile);
+		map.tiles.TryGetValue(new Point2<int> (Mathf.RoundToInt(mousePos.x), Mathf.RoundToInt(mousePos.y)), out tile);
 
 		if (tile != null) {
 			switch (tile.type) {

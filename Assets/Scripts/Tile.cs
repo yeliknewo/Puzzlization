@@ -3,8 +3,8 @@ using System.Collections;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Tile : MonoBehaviour {
-	private Point2 _coords = new Point2();
-	public Point2 coords {
+	private Point2<int> _coords = new Point2<int>();
+	public Point2<int> coords {
 		private set {
 			_coords = value;
 		}
@@ -35,14 +35,14 @@ public class Tile : MonoBehaviour {
 		}
 	}
 
-	public void Setup(Point2 coords, TileType newType) {
+	public void Setup(Point2<int> coords, TileType newType) {
 		SetCoords (coords);
 		SetType (newType);
 	}
 		
-	void SetCoords(Point2 newCoords) {
+	void SetCoords(Point2<int> newCoords) {
 		this.coords = newCoords;
-		transform.position = new Vector2 (this.coords.x, this.coords.y);
+		transform.position = new Vector2 (this.coords.a, this.coords.b);
 		map.tiles.Add (coords, this);
 	}
 

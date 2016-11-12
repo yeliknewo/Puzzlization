@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Unit : MonoBehaviour {
-	public Point2 coords {
+	public Point2<int> coords {
 		get {
 			return tile.coords;
 		}
@@ -40,7 +40,7 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public void Setup(Point2 coords, UnitType newType) {
+	public void Setup(Point2<int> coords, UnitType newType) {
 		SetCoords (coords);
 		SetType (newType);
 	}
@@ -50,7 +50,7 @@ public class Unit : MonoBehaviour {
 		transform.position = this.tile.transform.position + Vector3.back;
 	}
 
-	public void SetCoords(Point2 newCoords) {
+	public void SetCoords(Point2<int> newCoords) {
 		Tile temp;
 		map.tiles.TryGetValue (newCoords, out temp);
 		if (temp != null) {
