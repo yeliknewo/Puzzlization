@@ -42,4 +42,9 @@ public class Point3<T>: IEquatable<Point3<T>>
 	{
 		return this.a.Equals (other.a) && this.b.Equals (other.b) && this.c.Equals (other.c);
 	}
+
+	public override string ToString ()
+	{
+		return string.Format ("[Point3: a={0}, b={1}, c={2}]", a, b, c);
+	}
 }
