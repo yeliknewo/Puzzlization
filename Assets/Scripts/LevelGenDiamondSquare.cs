@@ -35,25 +35,33 @@ namespace LevelGenDiamondSquare {
 			units = new UnitType[max.a - min.a + 1, max.b - min.b + 1];
 
 			float[,] heights = new float[max.a - min.a + 1, max.b - min.b + 1];
+			bool[,] used = new bool[max.a - min.a + 1, max.b - min.b + 1];
 
 			List<Point2<Point2<int>>> squares = new List<Point2<Point2<int>>> ();
 			List<Point2<Point2<int>>> diamonds = new List<Point2<Point2<int>>> ();
 			{
 				squares.Add (new Point2<Point2<int>> (min, max));
 				heights[min.a - min.a, min.b - min.b] = 0.0f;
+				used [min.a - min.a, min.b - min.b] = true;
 				heights[min.a - min.a, max.b - min.b] = 0.0f;
+				used [min.a - min.a, max.b - min.b] = true;
 				heights[max.a - min.a, min.b - min.b] = 0.0f;
+				used [max.a - min.a, min.b - min.b] = true;
 				heights[max.a - min.a, max.b - min.b] = 0.0f;
+				used [max.a - min.a, max.b - min.b] = true;
 			}
 
 			int size = (max.a - min.a);
-			for (int i = 0; i < size + 1; i++) {
+			for (int i = 0; i < size; i++) {
+				//Debug.Log ("Iteration: " + i);
+				//Debug.Log ("Squares: " + squares.Count);
+				//Debug.Log ("Diamonds: " + diamonds.Count);
 				if (i % 2 == 0) {
 					//diamond step
 					diamonds.Clear();
 					foreach (Point2<Point2<int>> square in squares) {
 						Point2<int> mid = new Point2<int>((square.a.a + square.b.a) / 2, (square.a.b + square.b.b) / 2);
-						if ((mid.a <= min.a || mid.b <= min.b) || (mid.a >= max.a || mid.b >= max.b)) {
+						if ((mid.a < min.a || mid.b < min.b) || (mid.a > max.a || mid.b > max.b)) {
 							continue;
 						}
 						float sum = 0.0f;
@@ -74,7 +82,12 @@ namespace LevelGenDiamondSquare {
 							sum += heights[square.a.a - min.a, square.b.b - min.b];
 							count += 1;
 						}
+						Debug.Log ("X: " + (mid.a - min.a) + ", Y: " + (mid.b - min.b));
+						if (used [mid.a - min.a, mid.b - min.b]) {
+							Debug.Log ("Already Used");
+						}
 						heights[mid.a - min.a, mid.b - min.b] = sum / count + this.GetRandomShift (size, i);
+						used [mid.a - min.a, mid.b - min.b] = true;
 
 						Point2<int> topRight = new Point2<int> (square.b.a, square.a.b);
 
@@ -111,10 +124,9 @@ namespace LevelGenDiamondSquare {
 					squares.Clear();
 					foreach (Point2<Point2<int>> diamond in diamonds) {
 						Point2<int> mid = new Point2<int> (diamond.a.a, diamond.b.b);
-						if ((mid.a <= min.a || mid.b <= min.b) || (mid.a >= max.a || mid.b >= max.b)) {
+						if ((mid.a < min.a || mid.b < min.b) || (mid.a > max.a || mid.b > max.b)) {
 							continue;
 						}
-						Debug.Log(diamond + " " + i + " " + mid);
 						Point2<int> bot = new Point2<int> (mid.a, mid.b + diamond.b.b - diamond.a.b);
 						Point2<int> left = new Point2<int> (mid.a + diamond.a.a - diamond.b.a, mid.b);
 						float sum = 0.0f;
@@ -135,7 +147,12 @@ namespace LevelGenDiamondSquare {
 							sum += heights[left.a -  min.a, left.b - min.b];
 							count += 1;
 						}
+						Debug.Log ("X: " + (mid.a - min.a) + ", Y: " + (mid.b - min.b));
+						if (used [mid.a - min.a, mid.b - min.b]) {
+							Debug.Log ("Already Used");
+						}
 						heights[mid.a - min.a, mid.b - min.b] = sum / count + this.GetRandomShift (size, i);
+						used [mid.a - min.a, mid.b - min.b] = true;
 
 						//topLeft
 						{
@@ -171,6 +188,7 @@ namespace LevelGenDiamondSquare {
 			for(int x = 0;x < heights.GetLength(0); x++) {
 				for(int y = 0; y < heights.GetLength(1); y++) {
 					float value = heights[x, y];
+					//Debug.Log (value);
 
 					TileType type = TileType.None;
 					if(value < -1.0) {

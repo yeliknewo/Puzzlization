@@ -12,10 +12,10 @@ public class LevelGen : MonoBehaviour {
 	void Start() {
 		Point2<int> min = new Point2<int> (minX, minY);
 		Point2<int> max = new Point2<int>(maxX, maxY);
-		GenerateLevel<LevelGenDiamondSquare.Gen> (
+		GenerateLevel<LevelGenPather.Gen> (
 			min,
 			max,
-			new LevelGenDiamondSquare.Gen(min, max)
+			new LevelGenPather.Gen(min, max)
 		);
 	}
 

@@ -87,7 +87,7 @@ public class Tile : MonoBehaviour {
 
 	void SetTypePeak() {
 		this.type = TileType.Peak;
-		this.spriteRenderer.color = Color.Lerp(Color.red, Color.black, 0.7f);
+		this.spriteRenderer.color = Color.Lerp(Color.red, Color.black, 0.9f);
 	}
 
 	void SetTypeCoast() {
