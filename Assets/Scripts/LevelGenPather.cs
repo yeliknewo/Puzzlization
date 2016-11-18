@@ -27,24 +27,27 @@ namespace LevelGenPather
 
 		private Point2<int> minPos;
 
+		private float heightDelta = 0.5f;
+
+		private float oceanMin = -3.0f;
+		private float oceanMax = -2.0f;
+		private float coastMax = -1.0f;
+		private float flatMax = 0.5f;
+		private float hillMax = 1.5f;
+		private float peakMax = 2.5f;
+
+		private float absMin;
+		private float absMax;
+
 		public Gen (Point2<int> min, Point2<int> max)
 		{
 			tiles = new TileType[max.a - min.a + 1, max.b - min.b + 1];
 			units = new UnitType[max.a - min.a + 1, max.b - min.b + 1];
 
-			float heightDelta = 0.5f;
-
-			float oceanMin = -3.0f;
-			float oceanMax = -2.0f;
-			float coastMax = -1.0f;
-			float flatMax = 0.5f;
-			float hillMax = 1.5f;
-			float peakMax = 2.5f;
-
-			float absMin = oceanMin;
-			float absMax = peakMax;
-
 			this.minPos = min;
+
+			this.absMax = peakMax;
+			this.absMin = oceanMin;
 
 			int width = max.a - min.a + 1;
 			int height = max.b - min.b + 1;
@@ -119,8 +122,6 @@ namespace LevelGenPather
 					TileType tileType;
 					UnitType unitType;
 
-					Debug.Log (heights [x, y]);
-
 					if (heights [x, y] <= oceanMax) {
 						tileType = TileType.Ocean;
 					} else if (heights [x, y] <= coastMax) {
@@ -152,18 +153,16 @@ namespace LevelGenPather
 		}
 
 		private float ScaleMin(float lastHeight, float min, float absMin) {
-			//NEEDS WORK
-			if (lastHeight - min < absMin) {
-				return -min;
+			if (lastHeight + min < absMin) {
+				return absMin - (lastHeight + min);
 			} else {
 				return min;
 			}
 		}
 
 		private float ScaleMax(float lastHeight, float max, float absMax) {
-			//NEEDS WORK
 			if (lastHeight + max > absMax) {
-				return -max;
+				return absMax - (lastHeight + max);
 			} else {
 				return max;
 			}
