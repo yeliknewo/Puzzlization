@@ -47,7 +47,7 @@ public class Unit : MonoBehaviour {
 
 	public void SetTile(Tile newTile) {
 		this.tile = newTile;
-		transform.position = this.tile.transform.position + Vector3.back;
+		transform.position = this.tile.transform.position + Vector3.back * Depths.UNIT_DEPTH;
 	}
 
 	public void SetCoords(Point2<int> newCoords) {

@@ -15,6 +15,16 @@ namespace LevelGenPather
 			}
 		}
 
+		private BuildingType[,] _buildings;
+		public BuildingType[,] buildings {
+			private set {
+				_buildings = value;
+			}
+			get {
+				return _buildings;
+			}
+		}
+
 		private UnitType[,] _units;
 		public UnitType[,] units {
 			private set {
@@ -41,8 +51,9 @@ namespace LevelGenPather
 
 		public Gen (Point2<int> min, Point2<int> max)
 		{
-			tiles = new TileType[max.a - min.a + 1, max.b - min.b + 1];
-			units = new UnitType[max.a - min.a + 1, max.b - min.b + 1];
+			this.tiles = new TileType[max.a - min.a + 1, max.b - min.b + 1];
+			this.buildings = new BuildingType[max.a - min.a + 1, max.b - min.b + 1];
+			this.units = new UnitType[max.a - min.a + 1, max.b - min.b + 1];
 
 			this.minPos = min;
 
@@ -56,33 +67,43 @@ namespace LevelGenPather
 			bool[,] finished = new bool[width, height];
 
 			List<Point2<int>> openPoints = new List<Point2<int>> ();
-			{
-				heights [0, 0] = GetNextHeight (0.0f, absMin, absMax);
-				finished [0, 0] = true;
-			}
-			{
-				int x = 1;
-				int y = 0;
-				openPoints.Add (new Point2<int> (x, y));
-			}
-			{
-				int x = 0;
-				int y = 1;
-				openPoints.Add (new Point2<int> (x, y));
-			}
 
 			List<Point2<int>> deltas = new List<Point2<int>> ();
 			{
-				deltas.Add (new Point2<int> (-1, -1));
+				for (int i = 0; i < 3; i++) {
+					deltas.Add (new Point2<int> (-1, -1));
+					deltas.Add (new Point2<int> (-1, 1));
+					deltas.Add (new Point2<int> (1, -1));
+					deltas.Add (new Point2<int> (1, 1));
+				}
+
 				deltas.Add (new Point2<int> (-1, 0));
-				deltas.Add (new Point2<int> (-1, 1));
 				deltas.Add (new Point2<int> (0, 1));
 				deltas.Add (new Point2<int> (0, -1));
-				deltas.Add (new Point2<int> (1, -1));
 				deltas.Add (new Point2<int> (1, 0));
-				deltas.Add (new Point2<int> (1, 1));
 			}
 
+			{
+				List<Point2<int>> startingPoints = new List<Point2<int>> ();
+
+				startingPoints.Add (new Point2<int> (0, 0));
+				startingPoints.Add (new Point2<int> (width - 1, 0));
+				startingPoints.Add (new Point2<int> (width - 1, height - 1));
+				startingPoints.Add (new Point2<int> (0, height - 1));
+
+				foreach (Point2<int> startingPoint in startingPoints) {
+					heights [startingPoint.a, startingPoint.b] = GetNextHeight (0.0f, absMin, absMax);
+					finished [startingPoint.a, startingPoint.b] = true;
+
+					foreach (Point2<int> delta in deltas) {
+						Point2<int> temp = new Point2<int> (startingPoint.a + delta.a, startingPoint.b + delta.b);
+						if (temp.a >= 0 && temp.b >= 0 && temp.a < width && temp.b < height) {
+							openPoints.Add (temp);
+						}
+					}
+				}
+			}
+				
 			while (openPoints.Count > 0) {
 				Point2<int> open = openPoints[Random.Range(0, openPoints.Count - 1)];
 				openPoints.Remove (open);
@@ -120,8 +141,10 @@ namespace LevelGenPather
 						Debug.LogError ("Map Generation Ended before All Tiles were finished");
 					}
 					TileType tileType;
+					BuildingType buildingType;
 					UnitType unitType;
 
+					//set tile type based on height
 					if (heights [x, y] <= oceanMax) {
 						tileType = TileType.Ocean;
 					} else if (heights [x, y] <= coastMax) {
@@ -136,13 +159,14 @@ namespace LevelGenPather
 						tileType = TileType.None;
 					}
 
-					if (tileType != TileType.None && heights [x, y] >= -1.0f) {
-						unitType = UnitType.Axe;
-					} else {
-						unitType = UnitType.None;
-					}
+					//set building type to none
+					buildingType = BuildingType.None;
+
+					//set unit type to none
+					unitType = UnitType.None;
 
 					this.tiles [x, y] = tileType;
+					this.buildings [x, y] = buildingType;
 					this.units [x, y] = unitType;
 				}
 			}
@@ -175,6 +199,15 @@ namespace LevelGenPather
 				return this.tiles [realX, realY];
 			}
 			return TileType.None;
+		}
+
+		public BuildingType GetBuildingType(Point2<int> coords) {
+			int realX = coords.a - minPos.a;
+			int realY = coords.b - minPos.b;
+			if (realX >= 0 && realX < units.GetLength (0) && realY >= 0 && realY < units.GetLength (1)) {
+				return this.buildings [realX, realY];
+			}
+			return BuildingType.None;
 		}
 
 		public UnitType GetUnitType(Point2<int> coords) {

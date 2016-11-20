@@ -15,11 +15,31 @@ public class Tile : MonoBehaviour {
 
 	private TileType _type = TileType.None;
 	public TileType type {
-		private set {
+		set {
 			_type = value;
 		}
 		get {
 			return _type;
+		}
+	}
+
+	private Unit _unit;
+	public Unit unit {
+		get {
+			return _unit;
+		}
+		set {
+			_unit = value;
+		}
+	}
+
+	private Building _building;
+	public Building building {
+		get {
+			return _building;
+		}
+		set {
+			_building = value;
 		}
 	}
 
@@ -42,7 +62,7 @@ public class Tile : MonoBehaviour {
 		
 	void SetCoords(Point2<int> newCoords) {
 		this.coords = newCoords;
-		transform.position = new Vector2 (this.coords.a, this.coords.b);
+		transform.position = new Vector3 (this.coords.a, this.coords.b, Depths.TILE_DEPTH);
 		map.tiles.Add (coords, this);
 	}
 

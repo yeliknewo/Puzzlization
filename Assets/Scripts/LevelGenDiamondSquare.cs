@@ -14,6 +14,16 @@ namespace LevelGenDiamondSquare {
 			}
 		}
 
+		private BuildingType[,] _buildings;
+		public BuildingType[,] buildings {
+			private set {
+				_buildings = value;
+			}
+			get {
+				return _buildings;
+			}
+		}
+
 		private UnitType[,] _units;
 		public UnitType[,] units {
 			private set {
@@ -226,6 +236,15 @@ namespace LevelGenDiamondSquare {
 				return this.tiles [realX, realY];
 			}
 			return TileType.None;
+		}
+
+		public BuildingType GetBuildingType(Point2<int> coords) {
+			int realX = coords.a - minX;
+			int realY = coords.b - minY;
+			if (realX >= 0 && realX < units.GetLength (0) && realY >= 0 && realY < units.GetLength (1)) {
+				return this.buildings [realX, realY];
+			}
+			return BuildingType.None;
 		}
 
 		public UnitType GetUnitType(Point2<int> coords) {

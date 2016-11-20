@@ -6,6 +6,7 @@ public class LevelGen : MonoBehaviour {
 
 	public GameObject tileObjPrefab;
 	public GameObject unitObjPrefab;
+	public GameObject buildingObjPrefab;
 
 	public int minX = -8, maxX = 8, minY =-8, maxY = 8;
 
@@ -30,6 +31,13 @@ public class LevelGen : MonoBehaviour {
 					Tile tile = tileObj.GetComponent<Tile> ();
 					tile.Setup (coords, tileType);
 
+					BuildingType buildingType = gen.GetBuildingType (coords);
+					if (buildingType != BuildingType.None) {
+						GameObject buildingObj = Instantiate<GameObject> (buildingObjPrefab);
+						Building building = buildingObj.GetComponent<Building> ();
+						building.Setup (coords, buildingType);
+					}
+
 					UnitType unitType = gen.GetUnitType(coords);
 					if (unitType != UnitType.None) {
 						GameObject unitObj = Instantiate<GameObject> (unitObjPrefab);
@@ -44,5 +52,6 @@ public class LevelGen : MonoBehaviour {
 
 public interface LevelGenerator {
 	TileType GetTileType(Point2<int> coords);
+	BuildingType GetBuildingType(Point2<int> coords);
 	UnitType GetUnitType(Point2<int> coords);
 }
